@@ -4,7 +4,7 @@ An unofficial tureng.com English-German translater module. It uses official API 
 
 # Example 1
 
-~~~
+```javascript
 var Word = require("tureng");
 
 let kelime = new Word("katze");
@@ -14,11 +14,11 @@ kelime.getSuggestions((list) => {list.forEach((element) => {console.log(element)
 katzenartig
 katzenhaft
 */
-~~~
+```
 
 # Example 2
 
-~~~
+```javascript
 var Word = require("tureng");
 
 let kelime = new Word("album");
@@ -38,11 +38,11 @@ Translations: En2De, De2En, En2De and De2En ---> Object
 En2De/De2En={TermDE, TermENG} ---> Object
 Suggestions: ['Suggestion1', 'Suggestion2', ...] ---> Array
 */
-~~~
+```
 
 # Included commandline application source code
 
-~~~
+```javascript
 var Word = require("./main.js");
 var Table = require('cli-table2');
 
@@ -79,13 +79,13 @@ kelime.Translate(function(data) {
         }
     }
 });
-~~~
+```
 
 
 type `tureng yes` in console and it will output:
 
 
-~~~
+```
 ┌─────────────────────┬────────────────────────┐
 │ English             │ German                 │
 ├─────────────────────┼────────────────────────┤
@@ -101,4 +101,4 @@ type `tureng yes` in console and it will output:
 ├─────────────────────┼────────────────────────┤
 │ yes (IOS)           │ Ja (IOS)               │
 └─────────────────────┴────────────────────────┘
-~~~
+```
