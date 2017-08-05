@@ -1,0 +1,24 @@
+{
+  "name": "tureng",
+  "version": "1.0.8",
+  "description": "API for tureng german-english translater",
+  "main": "main.js",
+  "scripts": {},
+  "dependencies": {
+    "cli-table2": "*"
+  },
+  "preferGlobal": "true",
+  "bin": {
+    "tureng": "cli/tureng.bat"
+  },
+  "keywords": [
+    "tureng",
+    "translater",
+    "german",
+    "english",
+    "vocabulary",
+    "dictionary"
+  ],
+  "author": "Gökberk AKDENİZ",
+  "license": "ISC"
+}
