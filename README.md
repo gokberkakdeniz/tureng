@@ -1,27 +1,67 @@
 # tureng
 
-An unofficial tureng.com English-German translater module. It uses official API that used in mobile application.
+An unofficial tureng.com translater module and commandline application. It uses official API that used in mobile application.
+It supports English-Turkish and English-German.
 
-# Example 1
+# Usage CLI
 
-```javascript
-var Word = require("tureng");
+`tureng <word> <entr/ende>`
 
-let kelime = new Word("katze");
+
+~~~
+
+>>>tureng yes ende
+┌─────────────────────┬────────────────────────┐
+│ English             │ German                 │
+├─────────────────────┼────────────────────────┤
+│ yes [adv] (General) │ ja [adv] (General)     │
+├─────────────────────┼────────────────────────┤
+│ ...                 │ ...                    │
+└─────────────────────┴────────────────────────┘
+
+>>>tureng türkçe entr
+┌────────────────────────────────────────┬─────────────────────────────────────────┐
+│ Turkish                                │ English                                 │
+├────────────────────────────────────────┼─────────────────────────────────────────┤
+│ türkçe [i.] (Yaygın Kullanım (tr->en)) │ turkish [n.] (Common Usage (tr->en))    │
+├────────────────────────────────────────┼─────────────────────────────────────────┤
+│ ...                                    │ ...                                     │
+└────────────────────────────────────────┴─────────────────────────────────────────┘
+
+>>>tureng "turkish language" entr 
+┌───────────────────────────────────────────┬───────────────────────────────────┐
+│ English                                   │ Turkish                           │
+├───────────────────────────────────────────┼───────────────────────────────────┤
+│ turkish language  [n.] (General (en->tr)) │ türk dili [i.] (Genel (en->tr))   │
+├───────────────────────────────────────────┼───────────────────────────────────┤
+│ ...                                       │ ...                               │
+└───────────────────────────────────────────┴───────────────────────────────────┘
+~~~
+
+
+
+# Example Code 1
+
+~~~
+var Tureng = require("tureng");
+
+let kelime = new Tureng("katze", "ende"); // Tureng(word, lang); lang=ende for german, entr for english
 kelime.getSuggestions((list) => {list.forEach((element) => {console.log(element)})});
 
 /* Output:
 katzenartig
 katzenhaft
 */
-```
+~~~
 
-# Example 2
 
-```javascript
-var Word = require("tureng");
 
-let kelime = new Word("album");
+# Example Code 2
+
+~~~
+var Tureng = require("tureng");
+
+let kelime = new Tureng("album", "ende");
 kelime.Translate((list) => {console.log(list)});
 
 /* Output:
@@ -38,67 +78,4 @@ Translations: En2De, De2En, En2De and De2En ---> Object
 En2De/De2En={TermDE, TermENG} ---> Object
 Suggestions: ['Suggestion1', 'Suggestion2', ...] ---> Array
 */
-```
-
-# Included commandline application source code
-
-```javascript
-var Word = require("./main.js");
-var Table = require('cli-table2');
-
-
-let kelime = new Word(process.argv.slice(2));
-
-kelime.Translate(function(data) {
-    if (data.Situation.IsFound == true) {
-        if (data.Language==="English" || data.Language==="Both") {
-            var tableEn2De = new Table({head: ["English", "German"]})           
-            data.Translations.En2De.forEach(function(datax) {
-                tableEn2De.push([datax.TermENG, datax.TermDE]);
-            });
-            console.log(tableEn2De.toString());
-        } 
-        if (data.Language==="German" || data.Language==="Both") {
-            var tableDe2En = new Table({head: ["German", "English"]})           
-            data.Translations.De2En.forEach(function(datax) {
-                tableDe2En.push([datax.TermDE, datax.TermENG]);
-            });
-            console.log(tableDe2En.toString());
-        }         
-    } else {
-        if (data.Situation.Suggestion == true) {
-            console.log("No match found but suggestions found.");
-            var suggs = new Table({head: ["Suggestions"]});
-            console.log(suggs.toString());
-            data.Suggestions.forEach(function(datax) {
-                console.log(datax);
-            });
-            
-        } else {
-            console.log("No match found unfortunately no suggestions found to.")
-        }
-    }
-});
-```
-
-
-type `tureng yes` in console and it will output:
-
-
-```
-┌─────────────────────┬────────────────────────┐
-│ English             │ German                 │
-├─────────────────────┼────────────────────────┤
-│ yes [adv] (General) │ ja [adv] (General)     │
-├─────────────────────┼────────────────────────┤
-│ yes [adv] (General) │ jawohl [adv] (General) │
-├─────────────────────┼────────────────────────┤
-│ yes [n] (General)   │ Ja [n] (General)       │
-├─────────────────────┼────────────────────────┤
-│ yes (General)       │ jawohl (General)       │
-├─────────────────────┼────────────────────────┤
-│ yes (General)       │ ja (General)           │
-├─────────────────────┼────────────────────────┤
-│ yes (IOS)           │ Ja (IOS)               │
-└─────────────────────┴────────────────────────┘
-```
+~~~

@@ -1,11 +1,12 @@
 {
   "name": "tureng",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "API for tureng german-english translater",
   "main": "main.js",
   "scripts": {},
   "dependencies": {
-    "cli-table2": "*"
+    "cli-table2": "^0.2.0",
+    "crypto-js": "^3.1.9-1"
   },
   "preferGlobal": "true",
   "bin": {
@@ -19,6 +20,11 @@
     "vocabulary",
     "dictionary"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tncga/tureng.git"
+  },
+  "homepage": "https://github.com/tncga/tureng",
   "author": "Gökberk AKDENİZ",
   "license": "ISC"
 }
