@@ -18,7 +18,7 @@ Tureng.prototype.getSuggestions = function(callback) {
         hostname: "ac.tureng.co",
         path: "/?t=" + this.word + "&l=" + this.lang
     }, function(res) {
-        var str = '';        
+        var str = '';
         res.on('data', function(chunk) {
             str += chunk;
         });
@@ -48,10 +48,19 @@ Tureng.prototype.Translate = function(callback) {
                         var De2En = [];
                         const lang = parsed.AResults.length>parsed.BResults.length ? parsed.BResults.length>0 ? "Both":"English":parsed.AResults.length>0 ? "Both":"German"
                         var trans = lang == "German" ? {De2En} : lang == "English" ? {En2De} : {En2De, De2En}
-                        parsed.AResults.forEach((data) => {En2De.push({TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")"), 
-                                                                       TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")")})})
-                        parsed.BResults.forEach((data) => {De2En.push({TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")"), 
-                                                                       TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")")})})
+                        parsed.AResults.forEach((data) => {En2De.push({TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")"),
+                                                                       TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")"),
+                                                                       IsSlang: data.IsSlang})})
+                        parsed.BResults.forEach((data) => {De2En.push({TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")"),
+                                                                       TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")"),
+                                                                       IsSlang: data.IsSlang})})
+                        parsed.AFullTextResults.forEach((data) => {En2De.push({TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")"),
+                                                          TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")"),
+                                                          IsSlang: data.IsSlang})})
+                        parsed.BFullTextResults.forEach((data) => {De2En.push({TermDE: data.TermB + " " + (data.TermTypeTextB == null ? "" : data.TermTypeTextB + " ") + (data.CategoryTextB == null ? "" : "(" + data.CategoryTextB + ")"),
+                                                          TermENG: data.TermA + " " + (data.TermTypeTextA == null ? "" : data.TermTypeTextA + " ") + (data.CategoryTextA == null ? "" : "(" + data.CategoryTextA + ")"),
+                                                          IsSlang: data.IsSlang})})
+
                         callback({Situation: {IsFound: true, Suggestion: false}, Language: lang, Translations: trans });
 
                     } else {
@@ -63,12 +72,12 @@ Tureng.prototype.Translate = function(callback) {
                         }
                     }
                 })
-            })        
+            })
     } else if (this.lang == "entr") {
             var req = http.request({
                 hostname: "ws.tureng.com",
                 path: "/TurengSearchServiceV4.svc/Search",
-                method: "POST", 
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8"
                 }
@@ -84,11 +93,11 @@ Tureng.prototype.Translate = function(callback) {
                         if (parsed.MobileResult.IsTRToEN == 1) { // english ---> turkish
                             parsed.MobileResult.Results.forEach((data) => {x.push({TermENG: wordx + (data.TypeEN == null ? "" : " [" + data.TypeEN + "]") + (data.CategoryEN == null ? "" : " (" + data.CategoryEN + ")"),
                                                                                     TermTR: data.Term + (data.TypeTR == null ? "" : " [" + data.TypeTR + "]") + (data.CategoryTR == null ? "" : " (" + data.CategoryTR + ")")})});
-                            callback({Situation: {IsFound: true, Suggestion: false}, IsEn2Tr: true , Translations: x });                         
+                            callback({Situation: {IsFound: true, Suggestion: false}, IsEn2Tr: true , Translations: x });
                         } else { // turkish ---> english
                             parsed.MobileResult.Results.forEach((data) => {x.push({TermTR: wordx + (data.TypeTR == null ? "" : " [" + data.TypeTR + "]") + (data.CategoryTR == null ? "" : " (" + data.CategoryTR + ")"),
                                                                                     TermENG: data.Term + (data.TypeEN == null ? "" : " [" + data.TypeEN + "]") + (data.CategoryEN == null ? "" : " (" + data.CategoryEN + ")")})});
-                            callback({Situation: {IsFound: true, Suggestion: false}, IsEn2Tr: false , Translations: x });                         
+                            callback({Situation: {IsFound: true, Suggestion: false}, IsEn2Tr: false , Translations: x });
                         }
                     } else {
                         if (parsed.MobileResult.Suggestions == null) {
@@ -96,19 +105,19 @@ Tureng.prototype.Translate = function(callback) {
 
                         } else {
                             callback({Situation: {IsFound: false, Suggestion: true}, Suggestions: parsed.MobileResult.Suggestions})
-                        }                 
+                        }
                     }
                 })
             });
         req.write('{"Term":"' + wordx + '", "Code":"' + CreateToken(wordx) + '"}');
         req.end()
     } else if (this.lang == "enes") {
-            
+
     } else if (this.lang == "enfr") {
-            
+
     } else {
         callback("Language must be entr, ende, enes or enfr.")
     }
-   
+
 }
 module.exports = Tureng;
