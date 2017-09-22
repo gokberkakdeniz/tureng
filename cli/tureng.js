@@ -2,10 +2,15 @@ var Tureng = require("../main.js");
 var Table = require('cli-table2');
 var readline = require('readline');
 var colors = require('colors');
+var fs = require('fs');
+var http = require('http');
+const { spawn } = require('child_process');
+const { type } = require("os");
 var word = "";
 var lang = "";
 var container = [];
-var onetime = false
+var onetime = false;
+
 for(let i=2; i<process.argv.length; i++) {
     if (i==2) {
         lang = process.argv[i]
@@ -14,6 +19,7 @@ for(let i=2; i<process.argv.length; i++) {
     }
 }
 word = word.substring(0, word.length-1)
+
 if (word.length > 1) {
   onetime = true
 	translate(word, lang)
@@ -27,6 +33,30 @@ if (word.length > 1) {
 			lang = str.replace(".lang ", "")
 			console.log("Language is " + (lang == "entr" ? "English-Turkish." : (lang == "ende" ? "English-German." : "not defined. Please change it 'entr' or 'ende'.")))
 			process.stdout.write("> ");
+    } else if (str.indexOf(".voice ") > -1) {
+      switch (str.replace(".voice ", "")) {
+        case "us":
+          console.log("Playing American English voice...")
+          playVoice("AmE")
+          break;
+        case "uk":
+          console.log("Playing British English voice...")
+          playVoice("brE")
+          break;
+        case "au":
+          console.log("Playing Australian English voice...")
+          playVoice("AuE")
+          break;
+        case "no mp3":
+          console.log("There is no mp3 file for playing.")
+          break;
+        default:
+         console.log("Wrong accent. It must be 'us', 'uk' or 'au'.");
+         process.stdout.write("> ")
+      }
+    } else if (str.indexOf(".clear") > -1) {
+      process.stdout.write('\033c')
+      process.stdout.write("> ")
     } else if (str.indexOf(".") == 0 && Number(str.substring(1, str.length)) !== NaN && container.length > 0 && str.substring(1, str.length) > 0 && str.substring(1, str.length) <= container.length) {
       translate(container[str.substring(1, str.length)-1], lang);
 		} else {
@@ -35,6 +65,7 @@ if (word.length > 1) {
 
 	});
 }
+
 function translate(word, lang) {
   let kelime = new Tureng(word, lang);
   kelime.Translate(function(data) {
@@ -46,6 +77,7 @@ function translate(word, lang) {
                   tableENTR.push([datax[Object.keys(datax)[0]], datax[Object.keys(datax)[1]]]);
               });
               console.log(tableENTR.toString());
+              data.VoiceURLs.map((x) => download(x))
               if (onetime == false) {process.stdout.write("> ");}
            } else {
                if (data.Situation.Suggestion == true) {
@@ -106,4 +138,34 @@ function translate(word, lang) {
       		if (onetime == false) {process.stdout.write("> ");}
   	}
   });
+}
+
+function download(url) {
+  var name = url.match("TR\/(.*?)\/")[1] + ".mp3"
+  var file = fs.createWriteStream(name);
+  var request = http.get(url, function(res) {
+    res.pipe(file);
+  });
+}
+
+function playVoice(x) {
+  if (type() == "Linux") {
+    const bat = spawn("ffplay", ["-nodisp", x + ".mp3"]);
+
+    bat.on('exit', (code) => {
+      console.log("Voice is played.");
+      process.stdout.write("> ")
+    });
+  } else if (type() == "Windows_NT") {
+    //https://lawlessguy.wordpress.com/2015/06/27/update-to-a-command-line-mp3-player-for-windows/
+    const bat = spawn(__dirname + '\\cmdmp3.exe', [x + ".mp3"]);
+
+    bat.on('exit', (code) => {
+      console.log("Voice is played.");
+      process.stdout.write("> ")
+    });
+  } else {
+    console.log("Not supported platform.");
+  }
+
 }
