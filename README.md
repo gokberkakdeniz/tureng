@@ -1,8 +1,13 @@
+[![Build Status](https://travis-ci.org/tncga/tureng.svg?branch=master)](https://travis-ci.org/tncga/tureng)
 # **tureng**
-
 
 >An unofficial tureng.com translater module and commandline application. It uses official API that used in mobile application.
 >It supports English-Turkish and English-German.
+
+# Install
+ `npm install -g tureng`
+>**ffmpeg** required for voice ***on Linux***
+ - `sudo apt install ffmpeg` for Ubuntu (Tested on 17.04)
 
 
 
@@ -22,11 +27,6 @@
  - `.clear` clear screen
 
 ![CLI Screenshot](https://i.imgur.com/ymL8dGe.png)
-
-> ffmpeg required for voice on Linux
- - `sudo apt install ffmpeg` for Ubuntu (Tested on 17.04)
-
-
 
 # Example Code 1
 
@@ -68,6 +68,7 @@ Suggestions: ['Suggestion1', 'Suggestion2', ...] ---> Array
 */
 ```
 
+> On Windows, commandline MP3 player that we used is [cmdmp3 by James K. Lawless](https://lawlessguy.wordpress.com/2015/06/27/update-to-a-command-line-mp3-player-for-windows/)
 
 # Copyright
 
@@ -91,3 +92,4 @@ Suggestions: ['Suggestion1', 'Suggestion2', ...] ---> Array
 > CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
