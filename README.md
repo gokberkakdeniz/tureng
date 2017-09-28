@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/tncga/tureng.svg?branch=master)](https://travis-ci.org/tncga/tureng)
-# **tureng**
+# **tureng** [![Build Status](https://travis-ci.org/tncga/tureng.svg?branch=master)](https://travis-ci.org/tncga/tureng)
+
 
 >An unofficial tureng.com translater module and commandline application. It uses official API that used in mobile application.
 >It supports English-Turkish and English-German.
