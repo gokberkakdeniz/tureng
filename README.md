@@ -23,6 +23,10 @@
 
 ![CLI Screenshot](https://i.imgur.com/ymL8dGe.png)
 
+> ffmpeg required for voice on Linux
+ - `sudo apt install ffmpeg` for Ubuntu (Tested on 17.04)
+
+
 
 # Example Code 1
 
