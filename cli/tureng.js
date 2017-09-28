@@ -41,7 +41,7 @@ if (word.length > 1) {
           break;
         case "uk":
           console.log("Playing British English voice...")
-          playVoice("brE")
+          playVoice("BrE")
           break;
         case "au":
           console.log("Playing Australian English voice...")
