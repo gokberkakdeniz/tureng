@@ -1,5 +1,5 @@
 var Tureng = require("../main.js");
-var Table = require('cli-table2');
+var Table = require('cli-table3');
 var readline = require('readline');
 var colors = require('colors');
 var fs = require('fs');
